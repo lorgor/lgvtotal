@@ -1,6 +1,5 @@
 #summary The contents of lgvtotal's man page
-
-= lgvtotal.py =
+#labels Featured,Phase-Deploy
 
 == lgvtotal.py `[`-h`]` `[`-d loglevel`]` `[`--help`]` `[`--debug=loglevel`]` `[`directory`]` `[`filename`]`...  ==
 
