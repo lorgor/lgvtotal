@@ -14,4 +14,4 @@ Here is a quick recipe for getting started:
 
    * === Update lgvtotal.py with your key. (Find "API_KEY") ===
 
-   * == python lgvtotal.py my_file_to_be_scanned ==
+   * === python lgvtotal.py my_file_to_be_scanned ===
