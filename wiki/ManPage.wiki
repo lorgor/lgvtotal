@@ -2,7 +2,7 @@
 
 = lgvtotal.py =
 
-== lgvtotal.py [-h] [-d loglevel] [--help] [--debug=loglevel] [directory] [filename]...  ==
+== lgvtotal.py `[`-h`]` `[`-d loglevel`]` `[`--help`]` `[`--debug=loglevel`]` `[`directory`]` `[`filename`]`...  ==
 
 === -h --help ===
               Produce this help message.
