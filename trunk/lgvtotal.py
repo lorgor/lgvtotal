@@ -211,7 +211,7 @@ class VTotApi(object):
         req = urllib2.Request(url, data)
         try:
             returned = urllib2.urlopen(req).read()
-        except (urllib2.HTTPError):
+        except (urllib2.HTTPError, urllib2.URLError):
             print "Http Error:", sys.exc_info()[0]
             json = {'result': -999}
         except:
@@ -249,6 +249,9 @@ class VTotApi(object):
         params = {'key' : self.api_key, 'file' : open(filename, "rb") }
         try:
             json = post_opener.open(VTotApi._api_scan_url, params).read()
+        except (urllib2.HTTPError, urllib2.URLError):
+            print "Http Error:", sys.exc_info()[0]
+            json_ret = {'result': -999}
         except:
             print "Unexpected error:", sys.exc_info()[0]
             json_ret = {'result': -999}
@@ -386,7 +389,7 @@ class Worker(object):
 
             if self.getrpt_before_scan_f:
                 result = self.wk_getrpt(f_obj) 
-                assert (result == 0 or result == 1 or result == -2 or result == -999)
+                assert (result == 0 or result == 1 or result < 0)
                 if result == 1:
                     f_obj = self.q_wait.popleft()
                     self.q_done.append(f_obj)
@@ -399,9 +402,12 @@ class Worker(object):
                     break
 
                 # If RC = 0 then file is unknown to VTotal. Go and submit it.
-                # If RC = -1 then http error
+                # If RC = -999 then http error
                 elif result == 0 or result == -999:
                     pass
+                elif result == -1:
+                    logging.critical("API Key invalid")
+                    sys.exit(300)
                 else:
                     sys.exit(300)
 
@@ -417,7 +423,7 @@ class Worker(object):
                 # put file on the in-process q
 
                 result = jsondata['result']
-                assert (result == 0 or result == 1 or result == -2 or result == -999)
+                assert (result == 0 or result == 1 or result < 0)
                 if result  == 1:
                     f_obj = self.q_wait.popleft()
                     self.q_process.append(f_obj)
@@ -445,6 +451,9 @@ class Worker(object):
                 # Http error or other unknown error
                 elif result == -999:
                     continue
+                elif result == -1:
+                    logging.critical("API Key invalid")
+                    sys.exit(300)
                 else:
                     sys.exit(301)
 
@@ -462,7 +471,7 @@ class Worker(object):
 
             # If report results are ready, then print them, then move the file to the "done" q
             result = self.wk_getrpt(f_obj)
-            assert (result == 0 or result == 1 or result == -2 or result == -999)
+            assert (result == 0 or result == 1 or result < 0)
             if result == 1:
                 f_obj = self.q_process.popleft()
                 self.q_done.append(f_obj)
@@ -490,6 +499,9 @@ class Worker(object):
             # Http error or other unknown error
             elif result == -999:
                 continue
+            elif result == -1:
+                logging.critical("API Key invalid")
+                sys.exit(300)
             else:
                 sys.exit(302)
     
