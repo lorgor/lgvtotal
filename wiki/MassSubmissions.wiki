@@ -38,10 +38,3 @@ One way to get a decent report is to use "screen" on Ubuntu. Once the execution 
 }}}
 
 The output is screenlog.0 which can be renamed appropriately. I also keep a copy of the checkpoint file lgvtotal.pkl just in case.
-
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
