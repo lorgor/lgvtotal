@@ -1,4 +1,5 @@
 #summary Volatility 1.4 plugin reglist.py.
+#labels Featured,Phase-Deploy
 
 == Introduction ==
 
@@ -9,7 +10,7 @@ This plugin lists registry keys from the various hives in memory. It is a port o
 
 Install the plugin by copying it to:
 
-_mysrc_/Volatility-1.4_rc1/volatility/plugins/registry/
+`_mysrc_/Volatility-1.4_rc1/volatility/plugins/registry/`
 
 Plugin-specific parameters:
 
@@ -39,7 +40,7 @@ Hive names are:
 
 All of the ntuser.dat hives will be found and processed.
 
-Hives that are `[no name]` or `user specified` will have all possible checks run against them (since the actual hive contents cannot be determined with precision).
+Hives that are "`[no name]`" or "`user specified`" will have all possible checks run against them (since the actual hive contents cannot be determined with precision).
 
 {{{
 -C CHK, --chk=CHK
