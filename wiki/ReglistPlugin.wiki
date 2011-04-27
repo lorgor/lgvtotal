@@ -60,3 +60,7 @@ Generally the plugin is reasonably fast. However the "assoc" check (list all fil
 ==OS Support==
 
 Note that the plugin supports XP, and Win7 only. It has not been tested on other versions of Windows, but may function at least partially.
+
+==Credits==
+
+Special thanks to the Regripper people (Harlan Carvey, Brendan Coles) who kindly gave permission to use their code as a basis for this plugin.
