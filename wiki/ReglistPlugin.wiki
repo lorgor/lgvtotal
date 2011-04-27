@@ -10,7 +10,7 @@ This plugin lists registry keys from the various hives in memory. It is a port o
 
 Install the plugin by copying it to:
 
-`_mysrc_/Volatility-1.4_rc1/volatility/plugins/registry/`
+  `my_src_lib/Volatility-1.4_rc1/volatility/plugins/registry/`
 
 Plugin-specific parameters:
 
@@ -63,4 +63,4 @@ Note that the plugin supports XP, and Win7 only. It has not been tested on other
 
 ==Credits==
 
-Special thanks to the Regripper people (Harlan Carvey, Brendan Coles) who kindly gave permission to use their code as a basis for this plugin.
+Special thanks to the Regripper people (Harlan Carvey, Brendan Coles) who kindly gave permission to use their code as a basis for this plugin. Also the authors of the prtkey.py plugin (AAron Walters and Brendan Dolan-Gavitt) which was adapted to produce reglist.py.
