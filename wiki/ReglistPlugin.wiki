@@ -33,13 +33,13 @@ Name of a specific hive to process. All the checks for this hive will be run aga
 
 Hive names are:
 
-* system
-* ntuser.dat
-* software
+  * system
+  * ntuser.dat
+  * software
 
 All of the ntuser.dat hives will be found and processed.
 
-Hives that are "[no name]" or "user specified" will have all possible checks run against them (since the actual hive contents cannot be determined with precision).
+Hives that are `[no name]` or `user specified` will have all possible checks run against them (since the actual hive contents cannot be determined with precision).
 
 {{{
 -C CHK, --chk=CHK
