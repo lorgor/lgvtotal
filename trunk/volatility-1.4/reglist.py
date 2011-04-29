@@ -1,6 +1,6 @@
 # Volatility
 #
-# Author: lorgor toto897@gmail.com
+# Author: lorgor    toto897 -aT- gmail.com
 #
 #
 # Credits
@@ -147,7 +147,7 @@ regchk_by_os = {"WinXP" :
                    "mrt", "assoc"
                    ]
      },
-     "Win7S" :
+     "Win7" :
     {"system" : ["compname", "shutdown", "shutdowncount",
                  "timezone", "termserv", "mountdev",
                  "network", "nic2", "fw_config",
@@ -790,10 +790,22 @@ class RegList(hivelist.HiveList):
 
         # Determine OS
 
-        myos = config.PROFILE[:5]
+#        myos = config.PROFILE[:5]
 
-        if not myos in regchk_by_os:
+        profile = addr_space.profile
+
+        if profile.metadata.get('os', 0) == 'windows':
+            if profile.metadata.get('major', 0) == 5 and \
+                profile.metadata.get('minor', 0) == 1:
+                myos = "WinXP"
+            elif profile.metadata.get('major', 0) == 6 and \
+                profile.metadata.get('minor', 0) == 1:
+                myos = "Win7"
+        else:
             debug.error("OS not supported")
+
+        assert myos in regchk_by_os
+
         
         # Determine which checks to do
 
