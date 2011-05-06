@@ -41,6 +41,8 @@ import volatility.commands as commands
 import volatility.plugins.registry.hivelist as hivelist
 import volatility.obj as obj
 
+from time import gmtime, strftime
+
 
 
 #------------------------------------------------
@@ -193,6 +195,7 @@ PRT_DEV = 5        # Print mounted devices
 PRT_CMD = 6        # Print shell\\open\\command subkey value
 PRT_UNI = 7        # Print null-terminated Unicode strings
 PRT_USRAS = 8      # Print Explorer UserAssist subkey names
+PRT_BINTIME = 9    # Print 2 word binary timestamp
 
 #     Definition of Tuple fields
 #
@@ -503,9 +506,8 @@ chk_defn = {
         ["Microsoft\\Windows NT\\CurrentVersion\\ProfileList"],
         "Get content of ProfileList key",
         [LIST_SUBKEYS, ["all"],
-         [PRT_VALUE, ["+", "ProfileImagePath"]]]
-        #          PRT_WINTIME, ["ProfileLoadTimeHigh", "ProfileLoadTimeLow"]]]
-        #          timestamp doesn't print correctly
+         [PRT_VALUE, ["+", "ProfileImagePath"],
+          PRT_BINTIME, ["ProfileLoadTimeLow", "ProfileLoadTimeHigh"]]]
 
         ),
     # 2011-4-20 not tested yet lg
@@ -1155,6 +1157,43 @@ class RegList(hivelist.HiveList):
                     ad_ent = v_name.decode('rot13', "ignore").encode("ascii", 'backslashreplace')
                     outfd.write("   {0}\n".format(ad_ent)) 
             actions = actions[1:]
+
+        # Print a binary timestamp stored as low value / high value
+        # Assumes that low value key field is specified first, followed by high value
+        elif action == PRT_BINTIME:
+            valname = actions[1]
+            v_ts_lo = 0
+            v_ts_hi = 0
+            for v in rawreg.values(key):
+                v_name = v.Name    
+                if v_name == valname[0]: 
+                    tp, v_ts_lo = rawreg.value_data( v )
+                    assert tp == "REG_DWORD"
+                elif v_name == valname[1]:
+                    tp, v_ts_hi = rawreg.value_data( v )
+                    assert tp == "REG_DWORD"                    
+            if not v_ts_lo == 0:
+
+                # Format the time for display
+
+                windows_ts = (v_ts_hi << 32) | v_ts_lo
+                if(windows_ts == 0):
+                    unix_time =0
+                else:
+                    unix_time = windows_ts / 10000000 # nano-sec since 16
+                    unix_time = unix_time - 11644473600
+
+                if unix_time < 0:
+                    unix_time = 0
+
+                try:     
+                    utc_display = strftime("%a %b %d %H:%M:%S %Y UTC", gmtime( unix_time ))
+                except ValueError, e:
+                    utc_display = "Datetime conversion failure: " + str(e)
+
+                outfd.write("  {0} : {1} \n".format(valname, utc_display))
+
+            actions = actions[2:]
 
 
 
